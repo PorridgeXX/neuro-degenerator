@@ -1,4 +1,4 @@
-import {bot} from "./app/bot.ts";
+import {bot} from "./app";
 
 
 async function init(){
