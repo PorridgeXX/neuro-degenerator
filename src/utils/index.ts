@@ -1,2 +1,2 @@
 export { logger } from "./logger";
-export { forwardChecker } from "./forward.checker";
+export { forwardChecker } from "./forward.utils";
