@@ -2,7 +2,8 @@ import { Bot, GrammyError, HttpError } from "grammy";
 import { stickerComposer, textMessageComposer } from "../handlers";
 import { loggerMiddleware } from "../middlewares";
 
-export const bot = new Bot(process.env.TELEGRAM_BOT_KEY || "");
+import { config } from "./config";
+export const bot = new Bot(config.bot.token || "");
 bot.catch((err) => {
   const ctx = err.ctx;
   console.error(`Error while handling update ${ctx.update.update_id}:`);
