@@ -1,6 +1,6 @@
 import { Bot, GrammyError, HttpError } from "grammy";
 import { stickerComposer, textMessageComposer } from "../handlers";
-import { loggerMiddleware } from "../middlewares";
+import { loggerMiddleware, chatCounterMiddleware } from "../middlewares";
 
 import { config } from "./config";
 export const bot = new Bot(config.bot.token || "");
@@ -17,4 +17,7 @@ bot.catch((err) => {
   }
 });
 //Composers
-bot.use(loggerMiddleware).use(stickerComposer).use(textMessageComposer);
+bot
+  .use(loggerMiddleware)
+  .use(chatCounterMiddleware)
+  .use(textMessageComposer)
