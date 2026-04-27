@@ -1,5 +1,5 @@
 {
-  "id": "7b155b79-56b6-49f4-8348-af25aa5ba557",
+  "id": "c3859b81-ef8e-408e-8830-cd45616eb1ae",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -16,7 +16,7 @@
         },
         "chat_id": {
           "name": "chat_id",
-          "type": "integer",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
@@ -31,31 +31,75 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "mediaType": {
+          "name": "mediaType",
+          "type": "media_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "media_messages_chat_id_idx": {
+          "name": "media_messages_chat_id_idx",
+          "columns": [
+            {
+              "expression": "chat_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "mediaMessages_chat_id_messages_counter_chat_id_fk": {
+          "name": "mediaMessages_chat_id_messages_counter_chat_id_fk",
+          "tableFrom": "mediaMessages",
+          "tableTo": "messages_counter",
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "chat_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.messagesCounter": {
-      "name": "messagesCounter",
+    "public.messages_counter": {
+      "name": "messages_counter",
       "schema": "",
       "columns": {
         "chat_id": {
           "name": "chat_id",
-          "type": "integer",
-          "primaryKey": false,
+          "type": "bigint",
+          "primaryKey": true,
           "notNull": true
         },
         "count": {
           "name": "count",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": 0
         }
       },
@@ -79,7 +123,7 @@
         },
         "chat_id": {
           "name": "chat_id",
-          "type": "integer",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
@@ -88,10 +132,47 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "text_messages_chat_id_idx": {
+          "name": "text_messages_chat_id_idx",
+          "columns": [
+            {
+              "expression": "chat_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "textMessages_chat_id_messages_counter_chat_id_fk": {
+          "name": "textMessages_chat_id_messages_counter_chat_id_fk",
+          "tableFrom": "textMessages",
+          "tableTo": "messages_counter",
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "chat_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -99,7 +180,16 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.media_type": {
+      "name": "media_type",
+      "schema": "public",
+      "values": [
+        "photo",
+        "gif"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},
