@@ -1,6 +1,11 @@
 import { Bot, GrammyError, HttpError } from "grammy";
-import { stickerComposer, textMessageComposer } from "../handlers";
-import { loggerMiddleware, chatCounterMiddleware } from "../middlewares";
+import { textMessageComposer } from "../handlers";
+import {
+  loggerMiddleware,
+  chatCounterMiddleware,
+  forwardCheckerMiddleware,
+} from "../middlewares";
+import { gifComposer } from "../handlers/gif.handler";
 
 import { config } from "./config";
 export const bot = new Bot(config.bot.token || "");
@@ -20,4 +25,5 @@ bot.catch((err) => {
 bot
   .use(loggerMiddleware)
   .use(chatCounterMiddleware)
-  .use(textMessageComposer)
+  .use(forwardCheckerMiddleware)
+  .use(textMessageComposer);
