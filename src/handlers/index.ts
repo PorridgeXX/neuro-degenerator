@@ -1,2 +1,2 @@
-export { stickerComposer } from "./sticker.handler";
 export { textMessageComposer } from "./textMessage.handler";
+export { mediaComposer } from "./media.handler";

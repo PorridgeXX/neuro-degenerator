@@ -7,6 +7,7 @@ import {
   index,
   timestamp,
   pgEnum,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 export const mediaTypeEnum = pgEnum("media_type", ["photo", "gif"]);
@@ -36,10 +37,16 @@ export const mediaMessages = pgTable(
     chatId: bigint("chat_id", { mode: "number" })
       .notNull()
       .references(() => messagesCounter.chatId),
-    fileId: text("file_id").notNull(),
-    fileUniqueId: text("file_unique_id").notNull(),
     mediaType: mediaTypeEnum().notNull(),
+    path: text("path").notNull(),
+    fileUniqueId: text("file_unique_id").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
-  (table) => [index("media_messages_chat_id_idx").on(table.chatId)],
+  (table) => [
+    index("media_messages_chat_id_idx").on(table.chatId),
+    uniqueIndex("media_messages_file_unique_id_idx").on(
+      table.chatId,
+      table.fileUniqueId,
+    ),
+  ],
 );

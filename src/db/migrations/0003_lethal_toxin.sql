@@ -1,0 +1,2 @@
+ALTER TABLE "media_messages" ADD COLUMN "file_unique_id" text NOT NULL;--> statement-breakpoint
+CREATE UNIQUE INDEX "media_messages_file_unique_id_idx" ON "media_messages" USING btree ("chat_id","file_unique_id");

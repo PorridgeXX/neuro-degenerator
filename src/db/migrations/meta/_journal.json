@@ -15,6 +15,20 @@
       "when": 1777293234354,
       "tag": "0001_left_mother_askani",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777307738548,
+      "tag": "0002_curly_groot",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1777310493663,
+      "tag": "0003_lethal_toxin",
+      "breakpoints": true
     }
   ]
 }

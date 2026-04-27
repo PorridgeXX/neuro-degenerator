@@ -1,13 +1,12 @@
 import { Bot, GrammyError, HttpError } from "grammy";
-import { textMessageComposer } from "../handlers";
+import { textMessageComposer, mediaComposer } from "../handlers";
 import {
   loggerMiddleware,
   chatCounterMiddleware,
   forwardCheckerMiddleware,
 } from "../middlewares";
-import { gifComposer } from "../handlers/gif.handler";
-
 import { config } from "./config";
+
 export const bot = new Bot(config.bot.token || "");
 bot.catch((err) => {
   const ctx = err.ctx;
@@ -21,9 +20,11 @@ bot.catch((err) => {
     console.error("Unknown error:", e);
   }
 });
+
 //Composers
 bot
   .use(loggerMiddleware)
   .use(chatCounterMiddleware)
   .use(forwardCheckerMiddleware)
-  .use(textMessageComposer);
+  .use(textMessageComposer)
+  .use(mediaComposer);
