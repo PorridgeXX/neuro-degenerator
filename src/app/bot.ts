@@ -6,18 +6,19 @@ import {
   forwardCheckerMiddleware,
 } from "../middlewares";
 import { config } from "./config";
+import { logger } from "../utils";
 
-export const bot = new Bot(config.bot.token || "");
+export const bot = new Bot(config.bot.token);
 bot.catch((err) => {
   const ctx = err.ctx;
-  console.error(`Error while handling update ${ctx.update.update_id}:`);
+  logger.error(`Error while handling update ${ctx.update.update_id}:`);
   const e = err.error;
   if (e instanceof GrammyError) {
-    console.error("Error in request:", e.description);
+    logger.error(`Error in request: ${e.description}`);
   } else if (e instanceof HttpError) {
-    console.error("Could not contact Telegram:", e);
+    logger.error(`Could not contact Telegram: ${e}`);
   } else {
-    console.error("Unknown error:", e);
+    logger.error(`Unknown error: ${e}`);
   }
 });
 

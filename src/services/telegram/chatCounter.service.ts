@@ -1,7 +1,6 @@
 import { db } from "../../db";
 import { messagesCounter } from "../../db";
 import { sql } from "drizzle-orm";
-import { logger } from "../../utils";
 
 export async function chatCounter(chatId: number) {
   const [row] = await db
@@ -14,8 +13,7 @@ export async function chatCounter(chatId: number) {
     .returning({ count: messagesCounter.count });
 
   if (!row) {
-    logger.error(`no row`);
-    return;
+    throw new Error("Failed to update chat counter");
   }
   return row.count;
 }

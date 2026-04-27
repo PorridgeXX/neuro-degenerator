@@ -1,11 +1,11 @@
 {
-  "id": "c3859b81-ef8e-408e-8830-cd45616eb1ae",
+  "id": "365d5afa-5600-4d44-89c6-de297b90f41a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.mediaMessages": {
-      "name": "mediaMessages",
+    "public.media_messages": {
+      "name": "media_messages",
       "schema": "",
       "columns": {
         "id": {
@@ -20,8 +20,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "file_id": {
-          "name": "file_id",
+        "mediaType": {
+          "name": "mediaType",
+          "type": "media_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "path": {
+          "name": "path",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -29,13 +36,6 @@
         "file_unique_id": {
           "name": "file_unique_id",
           "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "mediaType": {
-          "name": "mediaType",
-          "type": "media_type",
-          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -62,12 +62,33 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "media_messages_file_unique_id_idx": {
+          "name": "media_messages_file_unique_id_idx",
+          "columns": [
+            {
+              "expression": "chat_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "file_unique_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
-        "mediaMessages_chat_id_messages_counter_chat_id_fk": {
-          "name": "mediaMessages_chat_id_messages_counter_chat_id_fk",
-          "tableFrom": "mediaMessages",
+        "media_messages_chat_id_messages_counter_chat_id_fk": {
+          "name": "media_messages_chat_id_messages_counter_chat_id_fk",
+          "tableFrom": "media_messages",
           "tableTo": "messages_counter",
           "columnsFrom": [
             "chat_id"
@@ -111,8 +132,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.textMessages": {
-      "name": "textMessages",
+    "public.text_messages": {
+      "name": "text_messages",
       "schema": "",
       "columns": {
         "id": {
@@ -159,9 +180,9 @@
         }
       },
       "foreignKeys": {
-        "textMessages_chat_id_messages_counter_chat_id_fk": {
-          "name": "textMessages_chat_id_messages_counter_chat_id_fk",
-          "tableFrom": "textMessages",
+        "text_messages_chat_id_messages_counter_chat_id_fk": {
+          "name": "text_messages_chat_id_messages_counter_chat_id_fk",
+          "tableFrom": "text_messages",
           "tableTo": "messages_counter",
           "columnsFrom": [
             "chat_id"

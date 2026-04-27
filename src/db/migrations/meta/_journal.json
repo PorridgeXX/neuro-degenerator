@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1777293136189,
-      "tag": "0000_material_landau",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1777293234354,
-      "tag": "0001_left_mother_askani",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1777307738548,
-      "tag": "0002_curly_groot",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1777310493663,
-      "tag": "0003_lethal_toxin",
+      "when": 1777321307935,
+      "tag": "0000_clammy_wendigo",
       "breakpoints": true
     }
   ]

@@ -1,17 +1,17 @@
-import {bot} from "./app";
+import { bot } from "./app";
+import { logger } from "./utils";
 
-
-async function init(){
-   try {
+async function init() {
+  try {
     await bot.start();
-   }catch (error: unknown) {
-       if (error instanceof Error) {
-           console.error(`❌ Ошибка инициализации: ${error.message}`);
-       } else {
-           console.error(`❌ Неизвестная ошибка: ${String(error)}`);
-       }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      logger.error(`❌ Ошибка инициализации: ${error.message}`);
+    } else {
+      logger.error(`❌ Неизвестная ошибка: ${String(error)}`);
+    }
     process.exit(1);
-   }
+  }
 }
 
 await init();

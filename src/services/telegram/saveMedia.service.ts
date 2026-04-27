@@ -1,26 +1,31 @@
 import type { Context } from "grammy";
-import { logger } from "../../utils";
 import { config } from "../../app/config";
 import path from "path";
+import { mkdir } from "fs/promises";
 
 export const saveMediaService = async (ctx: Context) => {
   if (!ctx.message?.photo) {
-    logger.error("No photo in media service");
-    return;
+    throw new Error("No photo found in the message");
   }
 
   const photo = ctx.message.photo.at(-1);
   if (!photo) {
-    logger.error("Photo array is empty");
-    return;
+    throw new Error("No photo found in the message");
   }
 
   try {
     const file = await ctx.getFile();
     const dir = path.resolve("./uploads");
+    await mkdir(dir, { recursive: true });
+    if (!file.file_path) {
+      throw new Error("File path is undefined");
+    }
     const media = await fetch(
       `https://api.telegram.org/file/bot${config.bot.token}/${file.file_path}`,
     );
+    if (!media.ok) {
+      throw new Error(`Failed to fetch media: ${media.statusText}`);
+    }
     const filePath = path.join(
       dir,
       `${file.file_unique_id}${path.extname(file.file_path ?? ".jpg")}`,
@@ -28,6 +33,6 @@ export const saveMediaService = async (ctx: Context) => {
     await Bun.write(filePath, media);
     return filePath;
   } catch (err) {
-    logger.error(`Something went wrong with telegram API ${err}`);
+    throw new Error("Failed to save media", { cause: err });
   }
 };
