@@ -1,7 +1,7 @@
 import type { Context } from "grammy";
 import { config } from "../../app/config";
 import { mkdir } from "fs/promises";
-import { db } from "../../db";
+import { db, insertMediaSchema, mediaMessages } from "../../db";
 import path from "path";
 
 export const saveMediaService = async (ctx: Context) => {
@@ -45,19 +45,30 @@ export const saveMediaService = async (ctx: Context) => {
     throw new Error(`Failed to fetch media: ${media.statusText}`);
   }
 
+  const dir = path.resolve("./uploads");
+  const filePath = path.join(
+    dir,
+    `${file.file_unique_id}${path.extname(file.file_path)}`,
+  );
   try {
-    const dir = path.resolve("./uploads");
     await mkdir(dir, { recursive: true });
-
-    const filePath = path.join(
-      dir,
-      `${file.file_unique_id}${path.extname(file.file_path)}`,
-    );
-
     await Bun.write(filePath, media);
-
-    return filePath;
   } catch (err) {
     throw new Error("Failed to save media", { cause: err });
+  }
+
+  const result = insertMediaSchema.safeParse({
+    chatId: ctx.chat.id,
+    mediaType: "photo",
+    fileUniqueId: ctx.message.photo.at(-1)?.file_unique_id,
+    path: filePath,
+  });
+  if (!result.success) {
+    throw new Error("Check your data before put in database");
+  }
+  try {
+    await db.insert(mediaMessages).values(result.data).onConflictDoNothing();
+  } catch (err) {
+    throw new Error("Failed to add path to databath", { cause: err });
   }
 };
