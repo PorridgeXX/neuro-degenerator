@@ -34,7 +34,7 @@ export const mediaMessages = pgTable(
   "media_messages",
   {
     id: serial("id").primaryKey(),
-    chatId: bigint("chat_id", { mode: "number" })
+    chatId: bigint("chat_id", { mode: "bigint" })
       .notNull()
       .references(() => messagesCounter.chatId),
     mediaType: mediaTypeEnum().notNull(),
