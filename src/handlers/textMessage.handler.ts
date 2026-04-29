@@ -1,18 +1,13 @@
 import { Composer } from "grammy";
-import { db, insertTextSchema, textMessages } from "../db";
+import { textMessageService } from "../services/telegram";
 import { logger } from "../utils";
 
 export const textMessageComposer = new Composer();
 
 textMessageComposer.on("message:text", async (ctx) => {
-  const result = insertTextSchema.safeParse({
-    chatId: ctx.chat.id,
-    text: ctx.message.text,
-  });
-
-  if (!result.success) {
-    logger.error(`Can't add message to db ${result.error}`);
-    return;
+  try {
+    await textMessageService(ctx);
+  } catch (err) {
+    logger.error(err);
   }
-  await db.insert(textMessages).values(result.data);
 });
