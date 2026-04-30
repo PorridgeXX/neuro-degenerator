@@ -27,6 +27,7 @@ export const saveMediaService = async (ctx: Context) => {
     throw new Error("File path is undefined");
   }
 
+  //checking for a media in database
   const existing = await db.query.mediaMessages.findFirst({
     where: (t, { and, eq }) =>
       and(
@@ -58,13 +59,13 @@ export const saveMediaService = async (ctx: Context) => {
   }
 
   const result = insertMediaSchema.safeParse({
-    chatId: ctx.chat.id,
+    chatId: BigInt(ctx.chat.id),
     mediaType: "photo",
     fileUniqueId: ctx.message.photo.at(-1)?.file_unique_id,
     path: filePath,
   });
   if (!result.success) {
-    throw new Error("Check your data before put in database");
+    throw new Error(`Check your data before put in database ${result.error}`);
   }
   try {
     await db.insert(mediaMessages).values(result.data).onConflictDoNothing();
