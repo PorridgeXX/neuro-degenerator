@@ -9,7 +9,6 @@ import { autoQuote } from "@roziscoding/grammy-autoquote";
 export const bot = new Bot(config.bot.token);
 bot.catch((err) => {
   const ctx = err.ctx;
-  logger.error(`Error while handling update ${ctx.update.update_id}:`);
   const e = err.error;
   logger.error(
     { err: e, updateId: ctx.update.update_id },
@@ -22,9 +21,12 @@ bot.catch((err) => {
   }
 });
 
+//Settings
+bot.use(autoQuote()); // always reply on messages
+//Commands
+bot.use(slopCommandHandler);
 //Composers
 bot
-  .use(loggerMiddleware)
   .use(chatCounterMiddleware)
   .use(forwardCheckerMiddleware)
   .use(textMessageComposer)

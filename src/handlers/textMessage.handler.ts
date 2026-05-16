@@ -7,7 +7,8 @@ export const textMessageComposer = new Composer();
 
 textMessageComposer.on("message:text", async (ctx) => {
   try {
-    await textMessageService(ctx);
+    const input = parseTextMessageInput(ctx);
+    await textMessageService(input);
   } catch (err) {
     logger.error(err);
   }

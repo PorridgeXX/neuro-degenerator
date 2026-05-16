@@ -5,39 +5,23 @@ import { db, mediaMessages } from "@/db";
 import type { PhotoMessageInput } from "@/parsers";
 import path from "path";
 
-export const saveMediaService = async (ctx: Context) => {
-  if (!ctx.message?.photo) {
-    throw new Error("No photo found in the message");
-  }
-
-  const photo = ctx.message.photo.at(-1);
-
-  if (!photo) {
-    throw new Error("No photo found in the message");
-  }
-
-  const chat = ctx.chat;
-
-  if (!chat) {
-    throw new Error("No chat context");
-  }
-
-  const file = await ctx.getFile();
-
-  if (!file.file_path) {
-    throw new Error("File path is undefined");
-  }
-
+export const saveMediaService = async (input: PhotoMessageInput, api: Api) => {
   //checking for a media in database
   const existing = await db.query.mediaMessages.findFirst({
     where: (t, { and, eq }) =>
       and(
-        eq(t.chatId, BigInt(chat.id)),
-        eq(t.fileUniqueId, file.file_unique_id),
+        eq(t.chatId, BigInt(input.chatId)),
+        eq(t.fileUniqueId, input.fileUniqueId),
       ),
   });
 
   if (existing) return;
+
+  const file = await api.getFile(input.fileId);
+
+  if (!file.file_path) {
+    throw new Error("File path is undefined");
+  }
 
   const media = await fetch(
     `https://api.telegram.org/file/bot${config.bot.token}/${file.file_path}`,
@@ -52,25 +36,16 @@ export const saveMediaService = async (ctx: Context) => {
     dir,
     `${file.file_unique_id}${path.extname(file.file_path)}`,
   );
-  try {
-    await mkdir(dir, { recursive: true });
-    await Bun.write(filePath, media);
-  } catch (err) {
-    throw new Error("Failed to save media", { cause: err });
-  }
+  await mkdir(dir, { recursive: true });
+  await Bun.write(filePath, media);
 
-  const result = insertMediaSchema.safeParse({
-    chatId: BigInt(ctx.chat.id),
-    mediaType: "photo",
-    fileUniqueId: ctx.message.photo.at(-1)?.file_unique_id,
-    path: filePath,
-  });
-  if (!result.success) {
-    throw new Error(`Check your data before put in database ${result.error}`);
-  }
-  try {
-    await db.insert(mediaMessages).values(result.data).onConflictDoNothing();
-  } catch (err) {
-    throw new Error("Failed to add path to databath", { cause: err });
-  }
+  await db
+    .insert(mediaMessages)
+    .values({
+      chatId: BigInt(input.chatId),
+      mediaType: "photo",
+      fileUniqueId: file.file_unique_id,
+      path: filePath,
+    })
+    .onConflictDoNothing();
 };

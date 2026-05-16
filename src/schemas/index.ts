@@ -1,1 +1,0 @@
-export {TelegramFileSchema} from "./telegramFile.schema.ts"

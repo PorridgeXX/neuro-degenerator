@@ -13,11 +13,13 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@openrouter/sdk": "^0.12.1",
+    "@napi-rs/canvas": "^0.1.100",
+    "@roziscoding/grammy-autoquote": "^2.0.9",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
     "grammy": "^1.42.0",
+    "openai": "^6.35.0",
     "pg": "^8.20.0",
     "pino": "^10.3.1",
     "pino-pretty": "^13.1.3",

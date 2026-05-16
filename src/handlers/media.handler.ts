@@ -6,8 +6,9 @@ export const mediaComposer = new Composer();
 
 mediaComposer.on("message:photo", async (ctx) => {
   try {
-    saveMediaService(ctx);
+    const photo = parsePhotoMessageInput(ctx);
+    await saveMediaService(photo, ctx.api);
   } catch (err) {
-    logger.error(`Failed to save media ${err}`);
+    logger.error(err);
   }
 });

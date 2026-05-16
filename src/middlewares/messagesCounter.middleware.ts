@@ -11,8 +11,7 @@ export const chatCounterMiddleware = async (
       await chatCounter(ctx.chat.id);
       logger.info("counter has been added to db");
     } catch (err) {
-      logger.error(`Can't update counter ${err}`);
-      throw err;
+      logger.error({ err }, "Can't update counter");
     }
   }
 
