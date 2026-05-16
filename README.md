@@ -35,6 +35,7 @@ Telegram-бот, который генерирует демотиваторы и
 <p align="center">
   <img src="assets/example2.jpg" width="640" alt="Generated demotivator example"/>
 </p>
+
 ### Стек технологий
 
 | Слой | Технология |
