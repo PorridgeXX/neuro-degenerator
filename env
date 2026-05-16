@@ -1,3 +1,8 @@
-API_KEY=""
-BOT_TOKEN=""
-DATABASE_URL="postgres://user:pass@localhost:5432/dbname"
+API_KEY="sk-6"
+BOT_TOKEN="
+
+POSTGRES_HOST="localhost"
+POSTGRES_NAME="por4"
+POSTGRES_PASSWORD="123"
+POSTGRES_DB="degeneration"
+POSTGRES_PORT="5432"
