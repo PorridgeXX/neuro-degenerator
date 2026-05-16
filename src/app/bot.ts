@@ -3,7 +3,7 @@ import { textMessageComposer, mediaComposer } from "@/handlers";
 import { chatCounterMiddleware, forwardCheckerMiddleware } from "@/middlewares";
 import { config } from "@/app/config";
 import { logger } from "@/utils";
-import { slopCommandHandler } from "@/handlers";
+import { slopCommandHandler, helpCommandHandler } from "@/commands";
 import { autoQuote } from "@roziscoding/grammy-autoquote";
 
 export const bot = new Bot(config.bot.token);
@@ -24,7 +24,7 @@ bot.catch((err) => {
 //Settings
 bot.use(autoQuote()); // always reply on messages
 //Commands
-bot.use(slopCommandHandler);
+bot.use(slopCommandHandler).use(helpCommandHandler);
 //Composers
 bot
   .use(chatCounterMiddleware)
