@@ -26,9 +26,8 @@ Telegram-бот, который генерирует демотиваторы и
        ▼
   В чат отправляется демотиватор
 ```
+### Примеры
 
-
-### Примеры 
 <p align="center">
   <img src="assets/example1.jpg" width="640" alt="Generated demotivator example"/>
 </p>
@@ -49,6 +48,7 @@ Telegram-бот, который генерирует демотиваторы и
 | База данных | PostgreSQL |
 | Валидация | [Zod](https://zod.dev) |
 | Логирование | [Pino](https://getpino.io) |
+| Контейнеризация | Docker + Docker Compose |
 
 ### Структура проекта
 
@@ -65,16 +65,20 @@ src/
 │   ├── generation/         # Генерация текста через DeepSeek
 │   └── imageGeneration/    # Рендеринг демотиватора через Canvas
 └── utils/          # Логгер, кастомные ошибки
+
+Dockerfile          # Сборка образа бота (Bun + системные шрифты)
+docker-compose.yml  # postgres + migrate + bot
 ```
 
 ### Требования
 
-- [Bun](https://bun.sh) ≥ 1.3
-- Экземпляр PostgreSQL
 - Токен Telegram-бота (от [@BotFather](https://t.me/BotFather))
 - [API-ключ DeepSeek](https://platform.deepseek.com/)
+- **Для запуска в Docker:** Docker ≥ 24 и Docker Compose v2
+- **Для локального запуска:** [Bun](https://bun.sh) ≥ 1.3 и запущенный PostgreSQL
 
-### Установка
+### Запуск  
+
 
 **1. Клонировать репозиторий**
 
@@ -83,34 +87,30 @@ git clone https://github.com/PorridgeXX/neuro-degenerator.git
 cd neuro-degenerator
 ```
 
-**2. Установить зависимости**
-
-```bash
-bun install
-```
-
-**3. Настроить переменные окружения**
+**2. Создать `.env`**
 
 ```bash
 cp env .env
 ```
 
+И заполнить:
+
 ```env
 API_KEY="ваш_ключ_deepseek"
 BOT_TOKEN="ваш_токен_telegram_бота"
-DATABASE_URL="postgres://user:pass@localhost:5432/dbname"
+
+POSTGRES_HOST="postgres"
+POSTGRES_NAME="postgres"
+POSTGRES_PASSWORD="postgres"
+POSTGRES_DB="neuro_degenerator"
+POSTGRES_PORT="5432"
 ```
 
-**4. Запустить миграции базы данных**
+
+**3. Запустить**
 
 ```bash
-bunx drizzle-kit migrate
-```
-
-**5. Запустить бота**
-
-```bash
-bun run src/index.ts
+docker compose up -d
 ```
 
 ### Схема базы данных
@@ -130,6 +130,6 @@ bun run src/index.ts
 ### Примечания
 
 - Бот должен быть добавлен в группу с правами на чтение сообщений для пассивного сбора.
-- Медиафайлы хранятся локально на диске; колонка `path` в `media_messages` указывает на локальный путь к файлу.
+- Медиафайлы хранятся локально на диске. В Docker они лежат в томе `uploads_data` и монтируются в `/app/uploads`; колонка `path` в `media_messages` указывает на этот путь.
 - Бота располагайте на VPS вне территории Российской Федерации🇷🇺, иначе работать не будет((((((
 - Генерация использует `temperature: 1.5` для приколов, меняйте как хотите.
