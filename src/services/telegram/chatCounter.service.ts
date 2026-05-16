@@ -1,5 +1,4 @@
-import { db } from "../../db";
-import { messagesCounter } from "../../db";
+import { db, messagesCounter } from "@/db";
 import { sql } from "drizzle-orm";
 
 export async function chatCounter(chatId: number) {

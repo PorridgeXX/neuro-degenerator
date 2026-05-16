@@ -1,6 +1,6 @@
 import type { Context, NextFunction } from "grammy";
-import { chatCounter } from "../services/telegram";
-import { logger } from "../utils";
+import { chatCounter } from "@/services/telegram";
+import { logger } from "@/utils";
 
 export const chatCounterMiddleware = async (
   ctx: Context,

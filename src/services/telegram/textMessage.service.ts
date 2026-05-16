@@ -1,5 +1,5 @@
-import type { Context } from "grammy";
-import { db, insertTextSchema, textMessages } from "../../db";
+import type { TextMessageInput } from "@/parsers";
+import { db, textMessages } from "@/db";
 
 export const textMessageService = async (ctx: Context) => {
   if (!ctx.chat) {

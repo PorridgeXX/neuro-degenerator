@@ -1,6 +1,7 @@
 import { Composer } from "grammy";
-import { textMessageService } from "../services/telegram";
-import { logger } from "../utils";
+import { textMessageService } from "@/services/telegram";
+import { logger } from "@/utils";
+import { parseTextMessageInput } from "@/parsers";
 
 export const textMessageComposer = new Composer();
 

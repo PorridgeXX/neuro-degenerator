@@ -1,7 +1,8 @@
-import type { Context } from "grammy";
-import { config } from "../../app/config";
+import type { Api } from "grammy";
+import { config } from "@/app/config";
 import { mkdir } from "fs/promises";
-import { db, insertMediaSchema, mediaMessages } from "../../db";
+import { db, mediaMessages } from "@/db";
+import type { PhotoMessageInput } from "@/parsers";
 import path from "path";
 
 export const saveMediaService = async (ctx: Context) => {
