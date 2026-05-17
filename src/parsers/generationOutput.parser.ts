@@ -13,9 +13,8 @@ export const parseGenerationOutput = (
   const [title, subtitle] = content.trim().split("\n");
 
   if (!title) throw new GenerationFormatError(content);
-
   return {
-    title: title,
-    subtitle: subtitle || "",
+    title: title.trim(),
+    subtitle: (subtitle ?? "").trim(),
   };
 };

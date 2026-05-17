@@ -1,5 +1,6 @@
-import type { CommandInput } from "@/parsers";
+import { type CommandInput } from "@/parsers";
 import { textGeneration } from "@/services/generation";
+import { getRandomMedia, getRandomTextMessages } from "@/services/telegram";
 import { createDemotivatorService } from "@/services/imageGeneration/createDemotivator.service";
 import {
   GenerationFormatError,
@@ -29,12 +30,13 @@ const activeTimers: Map<number, Timer> = new Map();
 export const createDemotivatorController = async (
   ctx: CommandContext<Context>,
 ) => {
+  const input: CommandInput = { chatId: ctx.chatId };
   try {
-    const input: CommandInput = { chatId: ctx.chatId };
-
     if (!activeTimers.has(input.chatId)) {
-      const output = await textGeneration(input);
-      const createdDemotivator = await createDemotivatorService(output, input);
+      const messages = await getRandomTextMessages(input.chatId, 30);
+      const media = await getRandomMedia(input.chatId);
+      const output = await textGeneration(messages);
+      const createdDemotivator = await createDemotivatorService(output, media);
       await ctx.replyWithPhoto(new InputFile(createdDemotivator));
       activeTimers.set(
         input.chatId,

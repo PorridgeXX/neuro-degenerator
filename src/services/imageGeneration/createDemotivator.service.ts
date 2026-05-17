@@ -4,12 +4,10 @@ import {
   GlobalFonts,
   type SKRSContext2D,
 } from "@napi-rs/canvas";
-import { db, mediaMessages } from "@/db";
-import { eq, sql } from "drizzle-orm";
 import { pathToFileURL } from "bun";
 import path from "node:path";
-import type { CommandInput, GenerationOutput } from "@/parsers";
-import { NoMediaError } from "@/utils";
+import type { GenerationOutput } from "@/parsers";
+import type { RandomMedia } from "@/services/telegram";
 
 const fontPath = path.resolve(import.meta.dir, "fonts/TimesNewRoman.ttf");
 GlobalFonts.registerFromPath(fontPath, "TimesNew");
@@ -66,18 +64,9 @@ function drawCompressedText(
 
 export const createDemotivatorService = async (
   output: GenerationOutput,
-  input: CommandInput,
+  media: RandomMedia,
 ) => {
-  const response = await db
-    .select({ path: mediaMessages.path })
-    .from(mediaMessages)
-    .where(eq(mediaMessages.chatId, BigInt(input.chatId)))
-    .orderBy(sql`RANDOM()`)
-    .limit(1);
-
-  if (!response[0]) throw new NoMediaError(input.chatId);
-
-  const source = await loadImage(pathToFileURL(response[0].path));
+  const source = await loadImage(pathToFileURL(media.path));
 
   const textBlockH =
     TITLE_SIZE +
