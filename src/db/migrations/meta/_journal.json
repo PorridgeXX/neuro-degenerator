@@ -8,6 +8,13 @@
       "when": 1777321307935,
       "tag": "0000_clammy_wendigo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779062129730,
+      "tag": "0001_flaky_eternals",
+      "breakpoints": true
     }
   ]
 }

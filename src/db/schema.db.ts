@@ -8,6 +8,7 @@ import {
   timestamp,
   pgEnum,
   uniqueIndex,
+  real,
 } from "drizzle-orm/pg-core";
 
 export const mediaTypeEnum = pgEnum("media_type", ["photo", "gif"]);
@@ -34,7 +35,7 @@ export const mediaMessages = pgTable(
   "media_messages",
   {
     id: serial("id").primaryKey(),
-    chatId: bigint("chat_id", { mode: "bigint" })
+    chatId: bigint("chat_id", { mode: "number" })
       .notNull()
       .references(() => messagesCounter.chatId),
     mediaType: mediaTypeEnum().notNull(),
@@ -48,5 +49,34 @@ export const mediaMessages = pgTable(
       table.chatId,
       table.fileUniqueId,
     ),
+  ],
+);
+
+export const chatSettings = pgTable(
+  "chat_settings",
+  {
+    chatId: bigint("chat_id", { mode: "number" })
+      .primaryKey()
+      .references(() => messagesCounter.chatId),
+    customPrompt: text("custom_prompt"),
+    temperature: real("temperature"),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [index("chat_settings_chat_id_idx").on(table.chatId)],
+);
+
+export const generations = pgTable(
+  "generations",
+  {
+    id: serial("id").primaryKey(),
+    chatId: bigint("chat_id", { mode: "number" }).references(
+      () => messagesCounter.chatId,
+    ),
+    title: text("title").notNull(),
+    subtitle: text("subtitle").notNull().default(""),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("generations_chat_created_idx").on(table.chatId, table.createdAt),
   ],
 );

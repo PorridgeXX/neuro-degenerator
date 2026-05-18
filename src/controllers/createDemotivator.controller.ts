@@ -1,5 +1,9 @@
 import { type CommandInput } from "@/parsers";
-import { textGeneration } from "@/services/generation";
+import {
+  getPrompt,
+  setGenerationContext,
+  textGeneration,
+} from "@/services/textGeneration";
 import { getRandomMedia, getRandomTextMessages } from "@/services/telegram";
 import { createDemotivatorService } from "@/services/imageGeneration/";
 import {
@@ -35,7 +39,9 @@ export const createDemotivatorController = async (
     if (!activeTimers.has(input.chatId)) {
       const messages = await getRandomTextMessages(input.chatId, 30);
       const media = await getRandomMedia(input.chatId);
-      const output = await textGeneration(messages);
+      const prompt = await getPrompt(input);
+      const output = await textGeneration(messages, prompt);
+      await setGenerationContext(output.title, output.subtitle, input);
       const createdDemotivator = await createDemotivatorService(output, media);
       await ctx.replyWithPhoto(new InputFile(createdDemotivator));
       activeTimers.set(

@@ -1,3 +1,8 @@
 export { db } from "./index.db";
-export { textMessages, mediaMessages, messagesCounter } from "./schema.db";
-export * from "./types.db";
+export {
+  textMessages,
+  mediaMessages,
+  messagesCounter,
+  generations,
+  chatSettings,
+} from "./schema.db";
