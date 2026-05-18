@@ -10,10 +10,7 @@ export const saveMediaService = async (input: PhotoMessageInput, api: Api) => {
   //checking for a media in database
   const existing = await db.query.mediaMessages.findFirst({
     where: (t, { and, eq }) =>
-      and(
-        eq(t.chatId, BigInt(input.chatId)),
-        eq(t.fileUniqueId, input.fileUniqueId),
-      ),
+      and(eq(t.chatId, input.chatId), eq(t.fileUniqueId, input.fileUniqueId)),
   });
 
   if (existing) return;
@@ -40,7 +37,7 @@ export const saveMediaService = async (input: PhotoMessageInput, api: Api) => {
   const inserted = await db
     .insert(mediaMessages)
     .values({
-      chatId: BigInt(input.chatId),
+      chatId: input.chatId,
       mediaType: "photo",
       fileUniqueId: file.file_unique_id,
       path: filePath,

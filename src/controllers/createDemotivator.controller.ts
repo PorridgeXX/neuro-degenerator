@@ -1,7 +1,7 @@
 import { type CommandInput } from "@/parsers";
 import { textGeneration } from "@/services/generation";
 import { getRandomMedia, getRandomTextMessages } from "@/services/telegram";
-import { createDemotivatorService } from "@/services/imageGeneration/createDemotivator.service";
+import { createDemotivatorService } from "@/services/imageGeneration/";
 import {
   GenerationFormatError,
   NoMediaError,

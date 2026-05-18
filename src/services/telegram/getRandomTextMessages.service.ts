@@ -1,11 +1,6 @@
 import { db, textMessages } from "@/db";
 import { NotEnoughMessagesError } from "@/utils";
 import { eq, sql } from "drizzle-orm";
-
-export type RandomMessages = {
-  text: string;
-}[];
-
 const MIN_MESSAGES = 2;
 
 export const getRandomTextMessages = async (

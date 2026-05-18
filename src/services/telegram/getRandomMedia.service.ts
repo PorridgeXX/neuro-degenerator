@@ -10,7 +10,7 @@ export const getRandomMedia = async (chatId: number): Promise<RandomMedia> => {
   const [row] = await db
     .select({ path: mediaMessages.path })
     .from(mediaMessages)
-    .where(eq(mediaMessages.chatId, BigInt(chatId)))
+    .where(eq(mediaMessages.chatId, chatId))
     .orderBy(sql`RANDOM()`)
     .limit(1);
 
