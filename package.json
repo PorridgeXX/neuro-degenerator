@@ -19,6 +19,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@grammyjs/runner": "^2.0.3",
     "@napi-rs/canvas": "^0.1.100",
     "@roziscoding/grammy-autoquote": "^2.0.9",
     "dotenv": "^17.4.2",
