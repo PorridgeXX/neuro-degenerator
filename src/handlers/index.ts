@@ -1,2 +1,3 @@
+export { gifComposer } from "./gif.handler";
 export { textMessageComposer } from "./textMessage.handler";
-export { mediaComposer } from "./media.handler";
+export { photoComposer } from "./photo.handler";

@@ -6,7 +6,11 @@ import type { PhotoMessageInput } from "@/parsers";
 import path from "path";
 import { eq } from "drizzle-orm";
 
-export const saveMediaService = async (input: PhotoMessageInput, api: Api) => {
+export const saveMediaService = async (
+  input: PhotoMessageInput,
+  api: Api,
+  mediaType: "gif" | "photo",
+) => {
   //checking for a media in database
   const existing = await db.query.mediaMessages.findFirst({
     where: (t, { and, eq }) =>
@@ -38,7 +42,7 @@ export const saveMediaService = async (input: PhotoMessageInput, api: Api) => {
     .insert(mediaMessages)
     .values({
       chatId: input.chatId,
-      mediaType: "photo",
+      mediaType: mediaType,
       fileUniqueId: file.file_unique_id,
       path: filePath,
     })

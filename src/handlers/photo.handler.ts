@@ -2,12 +2,12 @@ import { Composer } from "grammy";
 import { saveMediaService } from "@/services/telegram";
 import { parsePhotoMessageInput } from "@/parsers";
 import { logger } from "@/utils";
-export const mediaComposer = new Composer();
+export const photoComposer = new Composer();
 
-mediaComposer.on("message:photo", async (ctx) => {
+photoComposer.on("message:photo", async (ctx) => {
   try {
     const photo = parsePhotoMessageInput(ctx);
-    await saveMediaService(photo, ctx.api);
+    await saveMediaService(photo, ctx.api, "photo");
   } catch (err) {
     logger.error(err);
   }

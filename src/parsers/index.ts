@@ -11,3 +11,7 @@ export {
   parseGenerationOutput,
   type GenerationOutput,
 } from "./generationOutput.parser.ts";
+export {
+  parseGifMessageInput,
+  type GifMessageInput,
+} from "./gifMessage.parser.ts";

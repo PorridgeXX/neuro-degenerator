@@ -19,6 +19,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@grammyjs/runner": "^2.0.3",
     "@napi-rs/canvas": "^0.1.100",
     "@roziscoding/grammy-autoquote": "^2.0.9",

@@ -1,5 +1,5 @@
 import { Bot, GrammyError, HttpError } from "grammy";
-import { textMessageComposer, mediaComposer } from "@/handlers";
+import { textMessageComposer, photoComposer, gifComposer } from "@/handlers";
 import { chatCounterMiddleware, forwardCheckerMiddleware } from "@/middlewares";
 import { config } from "@/app/config";
 import { logger } from "@/utils";
@@ -16,7 +16,8 @@ bot.catch((err) => {
   );
   if (e instanceof GrammyError) {
     logger.error({ description: e.description }, "Error in request");
-  } else if (e instanceof HttpError) {
+  }
+  if (e instanceof HttpError) {
     logger.error({ err: e }, "Could not contact Telegram");
   }
 });
@@ -30,4 +31,5 @@ bot
   .use(chatCounterMiddleware)
   .use(forwardCheckerMiddleware)
   .use(textMessageComposer)
-  .use(mediaComposer);
+  .use(gifComposer)
+  .use(photoComposer);
