@@ -5,8 +5,8 @@ import { GenerationFormatError, logger } from "@/utils";
 import type { Prompt } from ".";
 const MAX_RETRIES = 3;
 
-const client = new OpenAI({
-  baseURL: "https://api.deepseek.com",
+const clientOpenrouter = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
   apiKey: config.api.key,
 });
 
@@ -14,14 +14,15 @@ export const textGeneration = async (messages: string[], prompt: Prompt) => {
   const formatted = messages.map((t, i) => `${i + 1}. ${t}`).join("\n");
   let lastError: unknown;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    const response = await client.chat.completions.create({
-      model: "deepseek-v4-flash",
-      temperature: 1.5,
+    const response = await clientOpenrouter.chat.completions.create({
+      model: "inclusionai/ling-2.6-flash",
       messages: [
         { role: "system", content: prompt.prompt },
-        { role: "system", content: prompt.context },
+        { role: "user", content: prompt.context }, // divided for cache
         { role: "user", content: `Список сообщений:\n\n${formatted}` },
       ],
+      response_format: { type: "text" },
+      reasoning_effort: "low",
     });
     try {
       const output = parseGenerationOutput(
