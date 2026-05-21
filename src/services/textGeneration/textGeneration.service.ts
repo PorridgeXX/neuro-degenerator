@@ -15,7 +15,7 @@ export const textGeneration = async (messages: string[], prompt: Prompt) => {
   let lastError: unknown;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     const response = await clientOpenrouter.chat.completions.create({
-      model: "inclusionai/ling-2.6-flash",
+      model: "inclusionai/ring-2.6-1t",
       messages: [
         { role: "system", content: prompt.prompt },
         { role: "user", content: prompt.context }, // divided for cache
