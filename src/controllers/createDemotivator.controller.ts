@@ -11,41 +11,22 @@ import {
   GenerationFormatError,
   NoMediaError,
   NotEnoughMessagesError,
+  Timer,
 } from "@/utils";
-import type { CommandContext, Context } from "grammy";
-import { InputFile } from "grammy";
-
-class Timer {
-  private startedAt: number;
-  private delay: number;
-  constructor(callback: Function, delay: number) {
-    this.startedAt = Date.now();
-    this.delay = delay;
-    setTimeout(() => callback(), delay);
-  }
-
-  getRemaining() {
-    const elapsed = Date.now() - this.startedAt;
-    return Math.max(0, Math.ceil((this.delay - elapsed) / 1000));
-  }
-}
-
-const activeTimers: Map<number, Timer> = new Map();
+import { type CommandContext, type Context, InputFile } from "grammy";
 
 export const createDemotivatorController = async (
   ctx: CommandContext<Context>,
 ) => {
   const input: CommandInput = { chatId: ctx.chatId };
-  if (activeTimers.has(input.chatId)) {
+  const remaining = Timer.getRemaining(input.chatId);
+  if (remaining !== undefined) {
     await ctx.reply(
-      `Ты намаслил свою штуку дрюку? Погодь погодь погодь ${activeTimers.get(input.chatId)?.getRemaining()}cек ты о масле в тачке?`,
+      `Ты намаслил свою штуку дрюку? Погодь погодь погодь ${remaining}cек ты о масле в тачке?`,
     );
     return;
   }
-  activeTimers.set(
-    input.chatId,
-    new Timer(() => activeTimers.delete(input.chatId), 8000),
-  );
+  Timer.start(input.chatId);
   try {
     const messages = await getRandomTextMessages(input.chatId, 30);
     const media = await getRandomMedia(input.chatId);
@@ -55,7 +36,7 @@ export const createDemotivatorController = async (
     const createdDemotivator = await createDemotivatorService(output, media);
     await ctx.replyWithPhoto(new InputFile(createdDemotivator));
   } catch (err) {
-    activeTimers.delete(input.chatId);
+    Timer.clear(input.chatId);
     if (err instanceof NotEnoughMessagesError) {
       await ctx.reply("Недостаточно сообщений в чате");
       return;
