@@ -33,8 +33,15 @@ export const createDemotivatorController = async (
     const prompt = await getPrompt(input);
     const output = await textGeneration(messages, prompt);
     await setGenerationContext(output.title, output.subtitle, input);
-    const createdDemotivator = await createDemotivatorService(output, media);
-    await ctx.replyWithPhoto(new InputFile(createdDemotivator));
+    const result = await createDemotivatorService(output, media);
+    const file = new InputFile(result.buffer);
+
+    if (result.kind === "animation") {
+      await ctx.replyWithAnimation(file);
+    }
+    if (result.kind === "photo") {
+      await ctx.replyWithPhoto(file);
+    }
   } catch (err) {
     Timer.clear(input.chatId);
     if (err instanceof NotEnoughMessagesError) {
