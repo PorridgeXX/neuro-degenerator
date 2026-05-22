@@ -7,8 +7,6 @@ import path from "node:path";
 import type { DemotivatorLayout } from "./calculateLayout";
 import type { RandomMedia } from "@/services/telegram";
 
-const MAX_DURATION_SEC = 5;
-
 export async function insertGifIntoTemplate(
   template: Canvas,
   media: RandomMedia,
@@ -23,21 +21,17 @@ export async function insertGifIntoTemplate(
 
     const filter =
       `[1:v]scale=${layout.media.width}:${layout.media.height}[gif];` +
-      `[0:v][gif]overlay=${layout.media.x}:${layout.media.y}:shortest=0`;
+      `[0:v][gif]overlay=${layout.media.x}:${layout.media.y}:shortest=1`;
 
     await runFfmpeg([
       "-loop",
       "1",
       "-i",
       templatePath,
-      "-stream_loop",
-      "-0",
       "-i",
       media.path,
       "-filter_complex",
       filter,
-      "-t",
-      String(MAX_DURATION_SEC),
       "-r",
       "25",
       "-threads",
