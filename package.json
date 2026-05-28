@@ -7,7 +7,8 @@
   "scripts": {
     "test": "bun test",
     "test:watch": "bun test --watch",
-    "dev": "bun run src/index.ts"
+    "dev": "bun run src/index.ts",
+    "debug": "bun --inspect-brk run src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
