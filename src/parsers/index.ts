@@ -15,3 +15,7 @@ export {
   parseGifMessageInput,
   type GifMessageInput,
 } from "./gifMessage.parser.ts";
+export {
+  parseChatCounterInput,
+  type ChatCounterInput,
+} from "./chatCounter.parser.ts";
