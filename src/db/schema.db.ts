@@ -12,10 +12,16 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const mediaTypeEnum = pgEnum("media_type", ["photo", "gif"]);
-
+export const chatTypeEnum = pgEnum("chatType", [
+  "private",
+  "supergroup",
+  "group",
+  "channel",
+]);
 export const messagesCounter = pgTable("messages_counter", {
   chatId: bigint("chat_id", { mode: "number" }).primaryKey(),
   count: integer("count").default(0).notNull(),
+  chatType: chatTypeEnum().notNull().default("group"), // added group type to send message in direct
 });
 
 export const textMessages = pgTable(

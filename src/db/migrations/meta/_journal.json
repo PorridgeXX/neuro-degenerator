@@ -15,6 +15,13 @@
       "when": 1779062129730,
       "tag": "0001_flaky_eternals",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779993847455,
+      "tag": "0002_handy_smiling_tiger",
+      "breakpoints": true
     }
   ]
 }
