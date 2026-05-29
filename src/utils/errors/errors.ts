@@ -29,3 +29,9 @@ export class NoMediaError extends AppError {
     super(`No media in ${chatId} =(`);
   }
 }
+
+export class NoChatsError extends AppError {
+  constructor() {
+    super(`No available chats`);
+  }
+}

@@ -1,5 +1,10 @@
 import { Bot, GrammyError, HttpError } from "grammy";
-import { textMessageComposer, photoComposer, gifComposer } from "@/handlers";
+import {
+  textMessageComposer,
+  photoComposer,
+  gifComposer,
+  channelPostComposer,
+} from "@/handlers";
 import { chatCounterMiddleware, forwardCheckerMiddleware } from "@/middlewares";
 import { config } from "@/app/config";
 import { logger } from "@/utils";
@@ -21,15 +26,15 @@ bot.catch((err) => {
     logger.error({ err: e }, "Could not contact Telegram");
   }
 });
-
+//middlewares
+bot.use(chatCounterMiddleware).use(forwardCheckerMiddleware);
 //Settings
 bot.use(autoQuote()); // always reply on messages
 //Commands
 bot.use(slopCommandHandler).use(helpCommandHandler);
 //Composers
 bot
-  .use(chatCounterMiddleware)
-  .use(forwardCheckerMiddleware)
   .use(textMessageComposer)
   .use(gifComposer)
-  .use(photoComposer);
+  .use(photoComposer)
+  .use(channelPostComposer);

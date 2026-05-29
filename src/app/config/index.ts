@@ -9,6 +9,7 @@ const env = z
     POSTGRES_PASSWORD: z.string().min(1),
     POSTGRES_DB: z.string().min(1),
     POSTGRES_PORT: z.string().min(1).transform(Number),
+    TELEGRAM_CHANNEL_ID: z.string().transform(Number),
   })
   .parse(process.env);
 
@@ -21,5 +22,8 @@ export const config = {
     password: env.POSTGRES_PASSWORD,
     db: env.POSTGRES_DB,
     port: env.POSTGRES_PORT,
+  },
+  channel: {
+    channel: env.TELEGRAM_CHANNEL_ID,
   },
 } as const;
